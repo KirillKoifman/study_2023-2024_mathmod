@@ -1,0 +1,355 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><hr>
+<p>marp: true
+title: Marp
+paginate: true</p>
+<h2 id="backgroundcolor-grey">backgroundColor: grey</h2>
+<h2 id="-1">Лабораторная работа №1</h2>
+<h3 id="-git">Система контроля версий Git</h3>
+<p><br/>
+дисциплина:  Математическое моделирование</p>
+<p>Студент: Койфман Кирилл Дмитриевич
+Группа: НПИбд-01-21</p>
+<hr>
+<h2 id="-">Введение.</h2>
+<h3 id="-">Цель работы.</h3>
+<p>Создать и настроить рабочее пространство для выполнения работы. Получить навыки работы с системой контроля версий Git.</p>
+<h3 id="-">Задача.</h3>
+<p>Создать и настроить репозиторий курса с помощью Git и выполнить задания из файла по работе с Git.</p>
+<hr>
+<ol>
+<li>Для начала установим имя, почту, а также настроим core.autocrlfс параметрами true и input, чтобы все переводы строк текстовых файлов в главном репозитории были одинаковы. И добавим отображение Unicode (рис.1 - рис.2):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_1.png" alt="pic">
+<br/><em>РИС.1</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_2.png" alt="pic">
+<br/><em>РИС.2</em></p>
+<hr>
+<ol>
+<li>Теперь создаим проект &quot;Hello World!&quot;: 
+Для этого создадим пустой каталог с именем
+hello, затем войдём в него и создадим там файл с именем hello.html (рис.3):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_3.png" alt="pic">
+<br/><em>РИС.3</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_4.png" alt="pic">
+<br/><em>РИС.4</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_5.png" alt="pic">
+<br/><em>РИС.5(коммитить нечего)</em></p>
+<hr>
+<ol>
+<li>Добавим кое-какие HTML-теги к нашему приветствию (рис.6) и проверим статус:</li>
+<li>Теперь проиндексируем изменения (рис.7) </li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_6.png" alt="pic">
+<br/><em>РИС.6</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_7.png" alt="pic">
+<br/><em>РИС.7(файл был изменён и проиндексирован)</em></p>
+<hr>
+<p>Создадим коммит (рис.8):</p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_8.png" alt="pic">
+<br/><em>РИС.8(коммит был успешно сделан)</em></p>
+<p>Изменим страницу «Hello, World», чтобы она содержала стандартные теги <html>
+и <body>, и добавим изменения в индекс, после чего ещё раз изменим файл и создадим коммит (рис.9 - рис.11):</p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_9.png" alt="pic">
+<br/><em>РИС.9</em></p>
+<hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_10.png" alt="pic">
+<br/><em>РИС.10</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_11.png" alt="pic">
+<br/><em>РИС.11(hello.html имеет незафиксированные
+изменения, но уже не в буферной зоне)</em></p>
+<p>Теперь добавим второе изменение в индекс, а затем проверим состояние с
+помощью командыgit status (рис.12):</p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_12.png" alt="pic">
+<br/><em>РИС.12(изменения были успешно закоммичены)</em></p>
+<hr>
+<p>Проверим список произведенных изменений в разных форматах (рис.13, рис.14):</p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_13.png" alt="pic">
+<br/><em>РИС.13(спиосок ранее сделанных коммитов с прилагающейся информацией)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_14.png" alt="pic">
+<br/>*РИС.14(спиосок ранее сделанных коммитов с прилагающейся информацией:</p>
+<ul>
+<li>в однострочном формате;</li>
+<li>в однострочном формате, последние 2;</li>
+<li>в однострочном формате, сделанные за последние 3 минуты)*</li>
+</ul>
+<hr>
+<p>Вернёмся к предыдущей версии с помощью git checkout (рис.15):</p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_16.png" alt="pic">
+<br/><em>РИС.16(успешно откатились до последнего коммита и вывели последний вариант файла hello.html)</em></p>
+<p>Назовём текущую версию страницы hello первой (v1) и поднимемся к предущему коммиту и ему тоже присвоем тег (рис.17):</p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_17.png" alt="pic">
+<br/><em>РИС.17</em></p>
+<hr>
+<p>Теперь попробуем попереключаться между двумя отмеченными версиями (рис.18):</p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_18.png" alt="pic">
+<br/><em>РИС.18</em></p>
+<p>Проверим доступные теги (рис.19):</p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_19.png" alt="pic">
+<br/><em>РИС.19</em></p>
+<hr>
+<ol>
+<li>Теперь уделим внимание отмене локальных изменения:
+Переместимся на ветку master и изменим hello.html (рис.20 - рис.21):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_20.png" alt="pic">
+<br/><em>РИС.20</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_21.png" alt="pic">
+<br/><em>РИС.21(файл был изменён, но не проиндексирован, поэтому мы успешно его откатили до предыдущей версии)</em></p>
+<hr>
+<ol>
+<li>Теперь займёмся процесом отмены проиндексированных изменений:
+Переместимся на ветку master и изменим hello.html:
+Внесём изменение в файл hello.html в виде нежелательного комментария, проиндексируем его и проверим состояние, после чего выполним сброс буферной зоны к HEAD (рис.22 - рис.23). Теперь переключимся на версию коммита (рис.24):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_22.png" alt="pic">
+<br/><em>РИС.22</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_23.png" alt="pic">
+<br/><em>РИС.23</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_24.png" alt="pic">
+<br/><em>РИС.24(рабочий каталог снова чист)</em></p>
+<hr>
+<ol>
+<li>Попробуем создать коммит, а потом отменить его с помощью создания следующего коммита (рис.25 - рис.26):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_25.png" alt="pic">
+<br/><em>РИС.25</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_26.png" alt="pic">
+<br/><em>РИС.26(сделали неправильный коммит)</em></p>
+<p>Чтобы отменить коммит, нам необходимо сделать коммит, который удаляет изме-
+нения, сохраненные нежелательным коммитом. После этого проверим лог (рис.27):</p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_27.png" alt="pic">
+<br/><em>РИС.27(нежелытельный коммит сохранился в истории)</em></p>
+<hr>
+<ol>
+<li>А сейчас попробуем удалить коммит из ветки:
+Предположим, мы делаем коммит, и сразу понимаем, что это была ошибка. Было бы
+неплохо иметь команду «возврата», которая позволила бы нам сделать вид, что
+неправильного коммита никогда и не было:
+Вновь проверим историю коммитов и отметим тегом последний (рис.28):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_28.png" alt="pic">
+<br/><em>РИС.28</em></p>
+<p>Сбросим ветку до нужной точки (рис.29):</p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_29.png" alt="pic">
+<br/><em>РИС.29</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_30.png" alt="pic">
+<br/><em>РИС.30</em></p>
+<hr>
+<ol>
+<li>Удалим тег oops и коммиты, на которые он
+ссылался, сборщиком мусора (рис.31)</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_31.png" alt="pic">
+<br/><em>РИС.31(«oops» больше не будет отображаться в репозитории)</em></p>
+<hr>
+<ol>
+<li>Также попробуем внести изменения в сделанный коммит (рис.32 - рис.35):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_32.png" alt="pic">
+<br/><em>РИС.32</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_33.png" alt="pic">
+<br/><em>РИС.33(сделали коммит)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_34.png" alt="pic">
+<br/><em>РИС.34</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_35.png" alt="pic">
+<br/><em>РИС.35(заменили предыдущий коммит новым)</em></p>
+<hr>
+<ol>
+<li>Сейчас мы собираемся создать структуру нашего репозитория. Давайте перенесем
+страницу в каталог lib (рис.36)</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_36.png" alt="pic">
+<br/><em>РИС.36(успешно перенесли)</em></p>
+<hr>
+<ol>
+<li>Добавим файл index.html в наш репозиторий (рис.37 - рис.39):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_37.png" alt="pic">
+<br/><em>РИС.37</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_38.png" alt="pic">
+<br/><em>РИС.38</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_39.png" alt="pic">
+<br/><em>РИС.39(можно увидеть кусок страницы hello в маленьком окошке)</em></p>
+<hr>
+<ol>
+<li>Рассмотрим детальней каталог .git (рис.40), где можно увидеть:</li>
+<li>информацию git;</li>
+<li>базу данных объектов;</li>
+<li>файл конфигурации;</li>
+<li>информацию о ветках, тегах;</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_40.png" alt="pic">
+<br/><em>РИС.40</em></p>
+<hr>
+<ol>
+<li>Исследуем информацию о наших коммитах с помощью объектов git (рис.41 - рис.42):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_41.png" alt="pic">
+<br/><em>РИС.41(получили содержимое файла hello.html последней версии)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_42.png" alt="pic">
+<br/><em>РИС.42</em></p>
+<hr>
+<ol>
+<li>Создадим новую ветку (рис.43 - рис.46):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_44.png" alt="pic">
+<br/><em>РИС.43(переключимся на новую ветку и закоммитим изменения)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_43.png" alt="pic">
+<br/><em>РИС.44(создадим таблицу стилей в новой ветве)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_45.png" alt="pic">
+<br/><em>РИС.45(изменим основную страницу)</em></p>
+<hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_46.png" alt="pic">
+<br/><em>РИС.46(изменим вторую страницу)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_47.png" alt="pic">
+<br/><em>РИС.47(закоммитим изменения)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_48.png" alt="pic">
+<br/><em>РИС.48(результат hello.html)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_49.png" alt="pic">
+<br/><em>РИС.49(результат index.html)</em></p>
+<hr>
+<ol>
+<li>Теперь у нас есть 2 ветки, проверим информацию о них и попробуем произвести несколько оперций с ними (рис.50 - рис.54):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_50.png" alt="pic">
+<br/><em>РИС.50(информация о последних коммитах)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_51.png" alt="pic">
+<br/><em>РИС.51(переключимся на master и проверим содержимое hello.html, после чего вернёмся к style и сделаем тоже самое)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_52.png" alt="pic">
+<br/><em>РИС.52(вернёмся в master и добавим новый файл. И сделаем коммит)</em></p>
+<hr>
+<ol>
+<li>Сделаем коммит изменения README.md в ветку master (рис.53):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_53.png" alt="pic">
+<br/><em>РИС.53(теперь есть 2 отличниме ветки)</em></p>
+<hr>
+<ol>
+<li>Давайте сольём эти ветки в одну (рис.54):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_54.png" alt="pic">
+<br/><em>РИС.54(успешно слили ветки)</em></p>
+<hr>
+<ol>
+<li>Создадим искусственный конфликт при слиянии веток (рис.55 - рис.56):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_55.png" alt="pic">
+<br/><em>РИС.55(внесём изменения в ветке master)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_56.png" alt="pic">
+<br/><em>РИС.56(ветки вновь отделены)</em></p>
+<hr>
+<ol>
+<li>Решим созданный нами конфликт при слиянии веток (рис.57 - рис.59):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_57.png" alt="pic">
+<br/><em>РИС.57(в файле можно увидеть причину конфликта)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_58.png" alt="pic">
+<br/><em>РИС.58(отредкатируем файл, чтобы исправить конфликт)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_59.png" alt="pic">
+<br/><em>РИС.59(сделаем коммит. Ветки вновь успешно слились)</em></p>
+<hr>
+<ol>
+<li>Теперь произведём сброс ветки style (рис.60):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_60.png" alt="pic">
+<br/><em>РИС.60(в истории больше нет коммитов слияний)</em></p>
+<hr>
+<ol>
+<li>Также попробуем произвезти сброс ветки style (рис.61 - рис.62):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_61.png" alt="pic">
+<br/><em>РИС.61</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_62.png" alt="pic">
+<br/><em>РИС.62</em></p>
+<hr>
+<ol>
+<li>Воспользуемся командной base, чтобы вернуться в точку до 1-го слияния и перенести изменения из ветки master в ветку style (рис.63):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_63.png" alt="pic">
+<br/><em>РИС.63(репозиторий находится в состоянии до выполнения слияния)</em></p>
+<hr>
+<ol>
+<li>Теперь сольём изменения style в ветку master (рис.64):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_64.png" alt="pic">
+<br/><em>РИС.64(git выполнил ускоренное слияние-перемотку без каких-либо конфликтов)</em></p>
+<hr>
+<ol>
+<li>А сейчас займёмся клонированием репозитория (рис.65):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_65.png" alt="pic">
+<br/><em>РИС.65(перейдём в рабочий каталог и клинируем репозиторий hello)</em></p>
+<hr>
+<ol>
+<li>Проверим содержимое клонированного репозитория (рис.66):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_66.png" alt="pic">
+<br/><em>РИС.66(те же информация и коммиты, что и у исходного репозитория)</em></p>
+<hr>
+<ol>
+<li>Проверим, что такое origin (рис.67):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_67.png" alt="pic">
+<br/><em>РИС.67(получили информацию об исходной репозитории)</em></p>
+<hr>
+<ol>
+<li>Проверим доступные ветки в нашем репозитории (рис.68):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_68.png" alt="pic">
+<br/><em>РИС.68(можем увидеть как локальные ветки, так и удалённые)</em></p>
+<hr>
+<ol>
+<li>Попробуем внести изменения в оригинальный репозиторий, после чего извлечём и сольём изменения из удалённой ветки в текущую (рис.69 - рис.72):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_69.png" alt="pic">
+<br/><em>РИС.69(изменим файл)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_70.png" alt="pic">
+<br/><em>РИС.70(добавим изменения и сделаем коммит)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_71.png" alt="pic">
+<br/><em>РИС.71(команда git fetch извлекла новые коммиты из удаленного репозитория, но не слила их с нашими наработками в локальных ветках)</em></p>
+<hr>
+<ol>
+<li>Произведём слияние извлечённых изменения (рис.72):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_72.png" alt="pic">
+<br/><em>РИС.72(теперь изменения можно увидеть)</em></p>
+<hr>
+<ol>
+<li>Давайте добавим наблюдателя, ветку которая будет отслеживать удалённую ветку (рис.73):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_73.png" alt="pic">
+<br/><em>РИС.73(Теперь мы можем видеть ветку style в списке веток и логе)</em></p>
+<hr>
+<ol>
+<li>Создадим чистый репозиторий для расшаривания (рис.74)</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_74.png" alt="pic">
+<br/><em>РИС.74</em></p>
+<hr>
+<ol>
+<li>Добавим удалённый репозиторий к оригинальному (рис.75):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_75.png" alt="pic">
+<br/><em>РИС.75</em></p>
+<hr>
+<ol>
+<li>Так как чистые репозитории, как правило, расшариваются на каком-нибудь сете-
+вом сервере, нам необходимо отправить наши изменения в другие репозитории (рис.76 - рис.77):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_76.png" alt="pic">
+<br/><em>РИС.76(изменим файл)</em></p>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_77.png" alt="pic">
+<br/><em>РИС.77(отправим изменения)</em></p>
+<hr>
+<ol>
+<li>А теперь извлечём эти изменения (рис.78):</li>
+</ol>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab1/screenshots/Screenshot_78.png" alt="pic">
+<br/><em>РИС.78(получили отправленные изменения)</em></p>
+<hr>
+<h1 id="-">Спасибо за внимание!</h1>
+</body></html>
