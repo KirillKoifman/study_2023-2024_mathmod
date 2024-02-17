@@ -1,0 +1,126 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><hr>
+<p>marp: true
+title: Marp
+paginate: true</p>
+<h2 id="backgroundcolor-grey">backgroundColor: grey</h2>
+<h2 id="-2">Лабораторная работа №2</h2>
+<h3 id="-">Моделирование задачи &quot;Погоня&quot;</h3>
+<p><br/>
+дисциплина:  Математическое моделирование</p>
+<p>Студент: Койфман Кирилл Дмитриевич
+Группа: НПИбд-01-21</p>
+<hr>
+<h1 id="-">Введение.</h1>
+<h2 id="-">Цель работы.</h2>
+<p>Разработать решение для задачи &quot;Погоня&quot; с помощью математического моделирования на языке Julia.</p>
+<h2 id="-">Задачи.</h2>
+<ol>
+<li>Записать уравнение, описывающее движение катера, с начальными условиями для двух случаев (в зависимости от расположения катера относительно лодки в начальный момент времени). </li>
+<li>Построить траекторию движения катера и лодки для двух случаев.</li>
+<li>Найти точку пересечения траектории катера и лодки. </li>
+</ol>
+<hr>
+<h2 id="1-">1 задание</h2>
+<p>Для начала запишем уравнение, описывающее движение катера, с начальными условиями для 2-х случаев:
+$$
+\frac{x}{v}=\frac{19.5-x}{4.9v},
+\frac{x}{v}=\frac{19.5+x}{4.9v} \
+$$</p>
+<p><br/>
+И их решения для 2-х случаев:</p>
+<p>$$
+x_1=5 \
+x_2=3.305</p>
+<h2 id="-">$$</h2>
+<h2 id="-">Система дифференциальных уравнений:</h2>
+<p>$$
+\left{
+\begin{aligned}
+    \frac{dr}{dt}=v \
+    \sqrt{23.01}v= r\frac{d\Theta}{dt}
+\end{aligned}
+\right.
+$$</p>
+<p>Либо при условиях №1 и №2:
+$$
+\left{
+\begin{aligned}
+    \Theta=0 \
+    r_0=x1=5
+\end{aligned}
+\right.
+\left{
+\begin{aligned}
+    \Theta=-\pi \
+    r_0=x2=3.305
+\end{aligned}
+\right.</p>
+<h2 id="-">$$</h2>
+<p>Исключив из этой системы уравнений производную по $t$, получаем такое уравнение:
+$$
+\frac{dr}{d\Theta}=\frac{r}{\sqrt{23.01}}</p>
+<h2 id="-">$$</h2>
+<h2 id="2-">2 задание</h2>
+<p>Построим траекторию движения катера и лодки для двух случаев, написав алгоритм для этого:</p>
+<pre><code>using Plots 
+using DifferentialEquations
+
+<span class="hljs-attr">s</span> = <span class="hljs-number">19.5</span>
+<span class="hljs-attr">fi</span> = <span class="hljs-number">3</span> * π / <span class="hljs-number">4</span>
+dr(r, p, tetha) = r / sqrt(<span class="hljs-number">23.01</span>)
+<span class="hljs-attr">x</span> = (s*<span class="hljs-number">10</span>)/<span class="hljs-number">39</span>
+<span class="hljs-attr">r</span> = x
+<span class="hljs-attr">tetha</span> = <span class="hljs-number">0</span>
+<span class="hljs-attr">tethaRange</span> = (tetha, tetha + <span class="hljs-number">2</span>*pi)
+
+<span class="hljs-attr">problem</span> = ODEProblem(dr, r, tethaRange)
+<span class="hljs-attr">solution</span> = solve(problem, Tsit5(), <span class="hljs-attr">reltol=1e-8,</span> <span class="hljs-attr">abstol=1e-8)</span>
+solution.u[<span class="hljs-number">1</span>]
+
+gr()
+plot(solution.t[<span class="hljs-number">1</span>:<span class="hljs-number">21</span>], solution.u[<span class="hljs-number">1</span>:<span class="hljs-number">21</span>], <span class="hljs-attr">proj</span> = :polar, <span class="hljs-attr">line</span> = (:blue, <span class="hljs-number">2</span>), <span class="hljs-attr">label</span> = <span class="hljs-string">"Лодка браконьеров"</span>)
+plot!([fi, fi+<span class="hljs-number">0.000001</span>], [<span class="hljs-number">0</span>,<span class="hljs-number">10</span>], <span class="hljs-attr">line</span> = (:red, <span class="hljs-number">1</span>), <span class="hljs-attr">label</span> = <span class="hljs-string">"Катер береговой охраны"</span>, <span class="hljs-attr">legend</span> = :bottomright)
+
+savefig(<span class="hljs-string">"test1.png"</span>)
+</code></pre><hr>
+<h2 id="-1-">Траектории движения катера и лодки в 1-м случае</h2>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab2/Screenshots/test1.png" alt="pic">
+<br/></p>
+<hr>
+<p>## </p>
+<pre><code>using Plots 
+using DifferentialEquations
+
+<span class="hljs-attr">s</span> = <span class="hljs-number">19.5</span>
+<span class="hljs-attr">fi</span> = <span class="hljs-number">3</span> * π / <span class="hljs-number">4</span>
+dr(r, p, tetha) = r / sqrt(<span class="hljs-number">23.01</span>)
+<span class="hljs-attr">x</span> = (s*<span class="hljs-number">10</span>)/<span class="hljs-number">59</span>
+<span class="hljs-attr">r</span> = x
+<span class="hljs-attr">tetha</span> = -pi
+<span class="hljs-attr">tethaRange</span> = (tetha + <span class="hljs-number">2</span>*pi, tetha)
+
+<span class="hljs-attr">problem</span> = ODEProblem(dr, r, tethaRange)
+<span class="hljs-attr">solution</span> = solve(problem, Tsit5(), <span class="hljs-attr">reltol=1e-8,</span> <span class="hljs-attr">abstol=1e-8)</span>
+solution.u[<span class="hljs-number">1</span>]
+
+gr()
+plot!(solution.t[<span class="hljs-number">1</span>:<span class="hljs-number">21</span>], solution.u[<span class="hljs-number">1</span>:<span class="hljs-number">21</span>], <span class="hljs-attr">proj</span> = :polar, <span class="hljs-attr">line</span> = (:green, <span class="hljs-number">2</span>), <span class="hljs-attr">label</span> = <span class="hljs-string">"Лодка браконьеров"</span>)
+plot!([fi, fi+<span class="hljs-number">0.000001</span>], [<span class="hljs-number">0</span>,<span class="hljs-number">10</span>], <span class="hljs-attr">line</span> = (:red, <span class="hljs-number">1</span>), <span class="hljs-attr">label</span> = <span class="hljs-string">"Катер береговой охраны"</span>, <span class="hljs-attr">legend</span> = :bottomright)
+
+savefig(<span class="hljs-string">"test2.png"</span>)
+</code></pre><hr>
+<h2 id="-2-">Траектории движения катера и лодки во 2-м случае</h2>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab2/Screenshots/test2.png" alt="pic">
+<br/></p>
+<hr>
+<h2 id="3-">3 задание</h2>
+<p>Найдём точку пересечения траектории катера и лодки для обоих случаев:
+В 1-м случае значение tetha = 2.4, а значение расстояния r = 8.2.</p>
+<p>Во 2-м случае значение tetha = 2.3, а значение расстояния r = 2.7.</p>
+<hr>
+<p>##</p>
+<h2 id="-">Спасибо за внимание!</h2>
+</body></html>
