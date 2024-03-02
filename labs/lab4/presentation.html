@@ -1,0 +1,182 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><hr>
+<p>marp: true
+title: Marp
+paginate: true</p>
+<h2 id="backgroundcolor-grey">backgroundColor: grey</h2>
+<h2 id="-4">Лабораторная работа №4</h2>
+<h3 id="-">Модель гармонических колебаний</h3>
+<p><br/>
+дисциплина:  Математическое моделирование</p>
+<p>Студент: Койфман Кирилл Дмитриевич
+Группа: НПИбд-01-21</p>
+<hr>
+<h1 id="-">Введение.</h1>
+<h2 id="-">Цель работы.</h2>
+<p>Разработать решение для модели гармонических колебаний с помощью математического моделирования на языках Julia и OpenModelica.</p>
+<h2 id="-">Описание задания</h2>
+<p>Постройте фазовый портрет гармонического осциллятора и решение уравнения гармонического осциллятора для следующих случаев:</p>
+<ol>
+<li>Колебания гармонического осциллятора без затуханий и без действий внешней 
+силы &#x0307;$x$&#x0307;$+4.4x=0$</li>
+<li>Колебания гармонического осциллятора c затуханием и без действий внешней 
+силы &#x0307;$x$&#x0307;$+4.4x$&#x0307;$+0.4x=0$ </li>
+<li>Колебания гармонического осциллятора c затуханием и под действием внешней 
+силы &#x0307;$x$&#x0307;$+4.0x$&#x0307;$+4.0x=0.4sin(4t)$ </li>
+</ol>
+<p>На интервале t&isin;[0; 64] (шаг 0.05) с начальными условиями $x_0=0.4, y_0=0.4$</p>
+<h2 id="-">Задачи.</h2>
+<ol>
+<li>Реализовать модель и построить фазовый портрет гармонического осциллятора и график решения уравнения гармонического осциллятора на языке Julia для 3-х случаев. </li>
+<li>Реализовать модель и построить фазовый портрет гармонического осциллятора и график решения уравнения гармонического осциллятора на языке OpenModelica для 3-х случаев. </li>
+</ol>
+<hr>
+<h2 id="1-">1 задание</h2>
+<p>Запишем решение решения уравнения гармонического осциллятора для 3-х случаев на языке Julia:</p>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+<span class="hljs-comment"># x'' + 4.4x = 0 (NO damping and NO external force)</span>
+function no_damping_no_external_force(du, u, p, t)
+    <span class="hljs-attr">a</span> = p
+    du[<span class="hljs-number">1</span>] = u[<span class="hljs-number">2</span>]
+    du[<span class="hljs-number">2</span>] = -a*u[<span class="hljs-number">1</span>]
+end
+
+const <span class="hljs-attr">x</span> = <span class="hljs-number">0.4</span>
+const <span class="hljs-attr">y</span> = <span class="hljs-number">0.4</span>
+<span class="hljs-attr">u0</span> = [x, y]
+<span class="hljs-attr">p</span> = <span class="hljs-number">4.4</span>
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">64.0</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(no_damping_no_external_force, u0, timeSpan, p)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.05</span>)
+gr()
+
+plot(solution, <span class="hljs-attr">xaxis</span> = <span class="hljs-string">"t"</span>, <span class="hljs-attr">lable</span> = <span class="hljs-string">""</span>, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Решение уравнения гармонического осциллятора"</span>)
+savefig(<span class="hljs-string">"model_1_1.png"</span>)
+plot(solution, <span class="hljs-attr">vars=(2,1),</span> <span class="hljs-attr">xaxis</span> = <span class="hljs-string">"x"</span>, <span class="hljs-attr">yaxis</span> = <span class="hljs-string">"y"</span>, <span class="hljs-attr">lable</span> = <span class="hljs-string">""</span>, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Фазовый портрет гармонического осциллятора"</span>)
+savefig(<span class="hljs-string">"model_1_2.png"</span>)
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/model_1_1.png" alt="pic">
+<br/><em>РИС.1(Для 1-го случая (без затуханий и без действий внешней силы))</em></p>
+<hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/model_1_2.png" alt="pic">
+<br/><em>РИС.2(Для 1-го случая (без затуханий и без действий внешней силы))</em></p>
+<hr>
+<h2 id="1-">1 задание</h2>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+<span class="hljs-comment"># x'' + 4.4x' + 0.4x = 0 (WITH damping and NO external force)</span>
+function damping_no_external_force(du, u, p, t)
+    a, <span class="hljs-attr">b</span> = p
+    du[<span class="hljs-number">1</span>] = u[<span class="hljs-number">2</span>]
+    du[<span class="hljs-number">2</span>] = -a*du[<span class="hljs-number">1</span>] - b*u[<span class="hljs-number">1</span>]
+end
+
+const <span class="hljs-attr">x</span> = <span class="hljs-number">0.4</span>
+const <span class="hljs-attr">y</span> = <span class="hljs-number">0.4</span>
+<span class="hljs-attr">u0</span> = [x, y]
+<span class="hljs-attr">p</span> = (<span class="hljs-number">4.4</span>, <span class="hljs-number">0.4</span>)
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">64.0</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(damping_no_external_force, u0, timeSpan, p)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.05</span>)
+
+gr()
+
+plot(solution, <span class="hljs-attr">xaxis</span> = <span class="hljs-string">"t"</span>, <span class="hljs-attr">lable</span> = <span class="hljs-string">""</span>, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Решение уравнения гармонического осциллятора"</span>)
+savefig(<span class="hljs-string">"model_2_1.png"</span>)
+plot(solution, <span class="hljs-attr">vars=(2,1),</span> <span class="hljs-attr">xaxis</span> = <span class="hljs-string">"x"</span>, <span class="hljs-attr">yaxis</span> = <span class="hljs-string">"y"</span>, <span class="hljs-attr">lable</span> = <span class="hljs-string">""</span>, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Фазовый портрет гармонического осциллятора"</span>)
+savefig(<span class="hljs-string">"model_2_2.png"</span>)
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/model_2_1.png" alt="pic">
+<br/><em>РИС.3(Для 2-го случая (с затуханием и без действий внешней силы))</em></p>
+<hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/model_2_2.png" alt="pic">
+<br/><em>РИС.4(Для 2-го случая (с затуханием и без действий внешней силы))</em></p>
+<hr>
+<h2 id="1-">1 задание</h2>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+<span class="hljs-comment"># x'' + 4.4x' + 0.4x = 0.4sin(4t) (WITH damping and WITH external force)</span>
+function damping_external_force(du, u, p, t)
+    a, <span class="hljs-attr">b</span> = p
+    du[<span class="hljs-number">1</span>] = u[<span class="hljs-number">2</span>]
+    du[<span class="hljs-number">2</span>] = -a*du[<span class="hljs-number">1</span>] - b*u[<span class="hljs-number">1</span>] + <span class="hljs-number">0.4</span>*sin(<span class="hljs-number">4</span>*t)
+end
+
+const <span class="hljs-attr">x</span> = <span class="hljs-number">0.4</span>
+const <span class="hljs-attr">y</span> = <span class="hljs-number">0.4</span>
+<span class="hljs-attr">u0</span> = [x, y]
+<span class="hljs-attr">p</span> = (<span class="hljs-number">4.0</span>, <span class="hljs-number">4.0</span>)
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">64.0</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(damping_external_force, u0, timeSpan, p)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.05</span>)
+gr()
+
+plot(solution, <span class="hljs-attr">xaxis</span> = <span class="hljs-string">"t"</span>, <span class="hljs-attr">lable</span> = <span class="hljs-string">""</span>, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Решение уравнения гармонического осциллятора"</span>)
+savefig(<span class="hljs-string">"model_3_1.png"</span>)
+plot(solution, <span class="hljs-attr">vars=(2,1),</span> <span class="hljs-attr">xaxis</span> = <span class="hljs-string">"x"</span>, <span class="hljs-attr">yaxis</span> = <span class="hljs-string">"y"</span>, <span class="hljs-attr">lable</span> = <span class="hljs-string">""</span>, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Фазовый портрет гармонического осциллятора"</span>)
+savefig(<span class="hljs-string">"model_3_2.png"</span>)
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/model_3_1.png" alt="pic">
+<br/><em>РИС.5(Для 3-го случая (с затуханием и при воздействии внешней силы))</em></p>
+<hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/model_3_2.png" alt="pic">
+<br/><em>РИС.6(Для 3-го случая (с затуханием и при воздействии внешней силы))</em></p>
+<hr>
+<h2 id="2-">2 задание</h2>
+<p>Запишем решение решения уравнения гармонического осциллятора для 3-х случаев на языке OpenModelica:</p>
+<pre><code>model model_1
+
+Real x(<span class="hljs-name">start=0</span>.<span class="hljs-number">4</span>)<span class="hljs-comment">;</span>
+Real dx(<span class="hljs-name">start=0</span>.<span class="hljs-number">4</span>)<span class="hljs-comment">;</span>
+
+equation
+der(<span class="hljs-name">dx</span>) = <span class="hljs-number">-4.4</span>*x<span class="hljs-comment">;</span>
+der(<span class="hljs-name">x</span>) = dx<span class="hljs-comment">;</span>
+
+end model_1<span class="hljs-comment">;</span>
+</code></pre><p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/Screenshot_1.png" alt="pic"></p>
+<h2 id="-br-7-1-"><br/><em>РИС.7(Для 1-го случая (без затуханий и без действий внешней силы))</em></h2>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/Screenshot_2.png" alt="pic">
+<br/><em>РИС.7(Для 1-го случая (без затуханий и без действий внешней силы))</em></p>
+<hr>
+<pre><code>model model_2
+
+Real x(<span class="hljs-name">start=0</span>.<span class="hljs-number">4</span>)<span class="hljs-comment">;</span>
+Real dx(<span class="hljs-name">start=0</span>.<span class="hljs-number">4</span>)<span class="hljs-comment">;</span>
+
+equation
+der(<span class="hljs-name">dx</span>) = <span class="hljs-number">-4.4</span>*dx - <span class="hljs-number">0.4</span>*x<span class="hljs-comment">;</span>
+der(<span class="hljs-name">x</span>) = dx<span class="hljs-comment">;</span>
+
+end model_2<span class="hljs-comment">;</span>
+</code></pre><p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/Screenshot_3.png" alt="pic"></p>
+<h2 id="-br-9-2-"><br/><em>РИС.9(Для 2-го случая (с затуханием и без действий внешней силы))</em></h2>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/Screenshot_4.png" alt="pic">
+<br/><em>РИС.10(Для 2-го случая (с затуханием и без действий внешней силы))</em></p>
+<hr>
+<pre><code>model model_3
+
+Real x(<span class="hljs-name">start=0</span>.<span class="hljs-number">4</span>)<span class="hljs-comment">;</span>
+Real dx(<span class="hljs-name">start=0</span>.<span class="hljs-number">4</span>)<span class="hljs-comment">;</span>
+
+equation
+der(<span class="hljs-name">dx</span>) = <span class="hljs-number">-4.0</span>*dx - <span class="hljs-number">4.0</span>*x + <span class="hljs-number">0.4</span>*sin(<span class="hljs-number">4</span>*time);
+der(x) = dx;
+
+end model_3;
+</code></pre><p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/Screenshot_5.png" alt="pic"></p>
+<h2 id="-br-11-3-"><br/><em>РИС.11(Для 3-го случая (с затуханием и при воздействии внешней силы))</em></h2>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab4/Screenshots/Screenshot_6.png" alt="pic"></p>
+<h2 id="-br-12-3-"><br/><em>РИС.12(Для 3-го случая (с затуханием и при воздействии внешней силы))</em></h2>
+<p>##</p>
+<h2 id="-">Спасибо за внимание!</h2>
+</body></html>
