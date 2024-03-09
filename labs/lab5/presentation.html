@@ -1,0 +1,147 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><hr>
+<p>marp: true
+title: Marp
+paginate: true</p>
+<h2 id="backgroundcolor-grey">backgroundColor: grey</h2>
+<h2 id="-5">Лабораторная работа №5</h2>
+<h3 id="-">Модель &quot;хищник-жертва&quot;</h3>
+<p><br/>
+дисциплина:  Математическое моделирование</p>
+<p>Студент: Койфман Кирилл Дмитриевич
+Группа: НПИбд-01-21</p>
+<hr>
+<h2 id="-">Введение.</h2>
+<h2 id="-">Цель работы.</h2>
+<p>Разработать решение для модели &quot;хищник-жертва&quot; с помощью математического моделирования на языках Julia и OpenModelica.</p>
+<h2 id="-">Описание задания</h2>
+<p>Для модели «хищник-жертва»:</p>
+<p>$$
+\left{
+\begin{aligned}
+    \frac{dx}{dy}=-0.28x(t)+0.045x(t)y(t) \
+    \frac{dx}{dy}=0.38y(t)-0.035x(t)y(t)
+\end{aligned}
+\right.
+$$</p>
+<p>Постройте график зависимости численности хищников от численности жертв, 
+а также графики изменения численности хищников и численности жертв при 
+следующих начальных условиях: $x_0=10$, $y_0=31$. Найдите стационарное 
+состояние системы.</p>
+<h2 id="-">Задачи.</h2>
+<ol>
+<li>Реализовать модель и построить графики зависимости численности хищников от численности жертв и изменения численности хищников и численности жертв при начальных условиях: $x_0=10$, $y_0=31$ на языке Julia. </li>
+<li>Реализовать модель и построить графики зависимости численности хищников от численности жертв и изменения численности хищников и численности жертв при начальных условиях: $x_0=10$, $y_0=31$ на языке OpenModelica. </li>
+<li>Найти стационарное состояние системы на языках Julia и OpenModelica.</li>
+</ol>
+<hr>
+<h2 id="1-">1 задание</h2>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+const <span class="hljs-attr">a</span> = -<span class="hljs-number">0.28</span>
+const <span class="hljs-attr">b</span> = -<span class="hljs-number">0.045</span>
+const <span class="hljs-attr">c</span> = -<span class="hljs-number">0.38</span>
+const <span class="hljs-attr">d</span> = -<span class="hljs-number">0.035</span>
+
+function equations_system(du, u, p, t)
+    <span class="hljs-attr">x</span> = u[<span class="hljs-number">1</span>]
+    <span class="hljs-attr">y</span> = u[<span class="hljs-number">2</span>]
+    du[<span class="hljs-number">1</span>] = a*x - b*x*y
+    du[<span class="hljs-number">2</span>] = -c*y + d*x*y
+end
+
+<span class="hljs-attr">x0</span> = <span class="hljs-number">10.0</span>
+<span class="hljs-attr">y0</span> = <span class="hljs-number">31.0</span>
+<span class="hljs-attr">u0</span> = [x0, y0]
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">80.0</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(equations_system, u0, timeSpan)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.01</span>)
+
+plot(solution, <span class="hljs-attr">label</span> = <span class="hljs-string">""</span>, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Зависимость численности хищников\n от численности жертв"</span>)
+savefig(<span class="hljs-string">"julia_1.png"</span>)
+
+plot(solution, <span class="hljs-attr">idxs=(1,2),</span> <span class="hljs-attr">xaxis</span> = <span class="hljs-string">"x"</span>, <span class="hljs-attr">yaxis</span> = <span class="hljs-string">"y"</span>, <span class="hljs-attr">label</span> = <span class="hljs-string">""</span>, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Изменение численности\n хищников и численности жертв"</span>)
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab5/Screenshots/julia_1.png" alt="pic"></p>
+<h2 id="-br-"><br/></h2>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab5/Screenshots/julia_2.png" alt="pic">
+<br/></p>
+<hr>
+<h2 id="2-">2 задание</h2>
+<pre><code>model model1
+  Real x(start=<span class="hljs-number">10</span>)<span class="hljs-comment">;</span>
+  Real y(start=<span class="hljs-number">31</span>)<span class="hljs-comment">;</span>
+  constant Real a = -<span class="hljs-number">0</span>.<span class="hljs-number">28</span><span class="hljs-comment">;</span>
+  constant Real <span class="hljs-keyword">b </span>= -<span class="hljs-number">0</span>.<span class="hljs-number">045</span><span class="hljs-comment">;</span>
+  constant Real c = -<span class="hljs-number">0</span>.<span class="hljs-number">38</span><span class="hljs-comment">;</span>
+  constant Real d = -<span class="hljs-number">0</span>.<span class="hljs-number">035</span><span class="hljs-comment">;</span>
+
+equation
+  der(x) = a * x - <span class="hljs-keyword">b </span>* x  *y<span class="hljs-comment">;</span>
+  der(y) = -c * y + d * x * y<span class="hljs-comment">;</span>
+
+end model1<span class="hljs-comment">;</span>
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab5/Screenshots/om_1.png" alt="pic">
+<br/></p>
+<hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab5/Screenshots/om_2.png" alt="pic">
+<br/></p>
+<hr>
+<h2 id="3-">3 задание</h2>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+const <span class="hljs-attr">a</span> = -<span class="hljs-number">0.28</span>
+const <span class="hljs-attr">b</span> = -<span class="hljs-number">0.045</span>
+const <span class="hljs-attr">c</span> = -<span class="hljs-number">0.38</span>
+const <span class="hljs-attr">d</span> = -<span class="hljs-number">0.035</span>
+
+function equations_system(du, u, p, t)
+    <span class="hljs-attr">x</span> = u[<span class="hljs-number">1</span>]
+    <span class="hljs-attr">y</span> = u[<span class="hljs-number">2</span>]
+    du[<span class="hljs-number">1</span>] = a*x - b*x*y
+    du[<span class="hljs-number">2</span>] = -c*y + d*x*y
+end
+
+<span class="hljs-attr">x0</span> = c/d
+<span class="hljs-attr">y0</span> = a/b
+<span class="hljs-attr">u0</span> = [x0, y0]
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">80.0</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(equations_system, u0, timeSpan)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.01</span>)
+
+plot(solution, <span class="hljs-attr">label</span> = <span class="hljs-string">""</span>, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Стационарное состояние системы"</span>)
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab5/Screenshots/julia_3.png" alt="pic">
+<br/></p>
+<hr>
+<pre><code><span class="hljs-keyword">model</span> model2
+  constant Real a = <span class="hljs-number">-0.28</span>;
+  constant Real b = <span class="hljs-number">-0.045</span>;
+  constant Real c = <span class="hljs-number">-0.38</span>;
+  constant Real d = <span class="hljs-number">-0.035</span>;
+  Real x;
+  Real y;
+
+initial <span class="hljs-keyword">equation</span>
+  x <span class="hljs-comment">= c</span> / d;
+  y = a /<span class="hljs-comment"> b</span>;
+
+<span class="hljs-keyword">equation</span>
+  der(x) <span class="hljs-comment">= a * x - b * x  *y</span>;
+  der(y) = -c * y + d * x * y;
+
+end model2;
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab5/Screenshots/om_3.png" alt="pic">
+<br/></p>
+<hr>
+<p>##</p>
+<h2 id="-">Спасибо за внимание!</h2>
+</body></html>
