@@ -1,0 +1,153 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><hr>
+<p>marp: true
+title: Marp
+paginate: true</p>
+<h2 id="backgroundcolor-grey">backgroundColor: grey</h2>
+<h2 id="-6">Лабораторная работа №6</h2>
+<h3 id="-">Модель &quot;эпидемия&quot;</h3>
+<p><br/>
+дисциплина:  Математическое моделирование</p>
+<p>Студент: Койфман Кирилл Дмитриевич
+Группа: НПИбд-01-21</p>
+<hr>
+<h2 id="-">Введение.</h2>
+<h2 id="-">Описание задания</h2>
+<p>На одном острове вспыхнула эпидемия. Известно, что из всех проживающих 
+на острове $(N=13013)$ в момент начала эпидемии $(t=0)$ число заболевших людей 
+(являющихся распространителями инфекции) $I(0)=113$, а число здоровых людей с 
+иммунитетом к болезни $R(0)=31$. Таким образом, число людей восприимчивых к 
+болезни, но пока здоровых, в начальный момент времени $S(0)=N-I(0)- R(0)$.</p>
+<p>Постройте графики изменения числа особей в каждой из трех групп. </p>
+<p>Рассмотрите, как будет протекать эпидемия в случае: 
+1) если $I(0)\leq I^*$</p>
+<h2 id="2-i-0-i-">2) если $I(0)&gt; I^*$</h2>
+<h2 id="-">Цель работы.</h2>
+<p>Разработать решение для модели &quot;эпидемия&quot; с помощью математического моделирования на языках Julia и OpenModelica.</p>
+<h3 id="-">Задачи.</h3>
+<ol>
+<li>Реализовать модель &quot;эпидемии&quot; и построить графики изменения числа особей в каждой из 3-х групп для обоих случаев на языке Julia. </li>
+<li>Реализовать модель &quot;эпидемии&quot; и построить графики изменения числа особей в каждой из 3-х групп для обоих случаев на языке OpenModelica. </li>
+</ol>
+<hr>
+<h2 id="1-">1 задание</h2>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+const <span class="hljs-attr">N</span> = <span class="hljs-number">13013</span> <span class="hljs-comment">#number of all citizens living on the island</span>
+const <span class="hljs-attr">I0</span> = <span class="hljs-number">113</span> <span class="hljs-comment">#number of infected people at t=0</span>
+const <span class="hljs-attr">R0</span> = <span class="hljs-number">31</span> <span class="hljs-comment">#number of immune people at t=0</span>
+const <span class="hljs-attr">S0</span> = N - I0 - R0 <span class="hljs-comment">#number of healthy people at t=0</span>
+const <span class="hljs-attr">alpha</span> = <span class="hljs-number">0.23</span> <span class="hljs-comment">#coefficient of disease</span>
+const <span class="hljs-attr">beta</span> = <span class="hljs-number">0.085</span>  <span class="hljs-comment">#coefficient of recure</span>
+
+function equations_system(du, u, p, t)
+    S, I, <span class="hljs-attr">R</span> = u
+    du[<span class="hljs-number">1</span>] = <span class="hljs-number">0</span>
+    du[<span class="hljs-number">2</span>] = -beta * u[<span class="hljs-number">2</span>]
+    du[<span class="hljs-number">3</span>] = beta * I
+end
+
+<span class="hljs-attr">u0</span> = [S0, I0, R0]
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">80.0</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(equations_system, u0, timeSpan)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.01</span>)
+
+<span class="hljs-attr">S</span> = [u[<span class="hljs-number">1</span>] for u <span class="hljs-keyword">in</span> solution.u] <span class="hljs-comment">#number of healthy people during 'time'</span>
+<span class="hljs-attr">I</span> = [u[<span class="hljs-number">2</span>] for u <span class="hljs-keyword">in</span> solution.u] <span class="hljs-comment">#number of infected people during 'time'</span>
+<span class="hljs-attr">R</span> = [u[<span class="hljs-number">3</span>] for u <span class="hljs-keyword">in</span> solution.u] <span class="hljs-comment">#number of immune people during 'time'</span>
+<span class="hljs-attr">time</span> = [t for t <span class="hljs-keyword">in</span> solution.t] <span class="hljs-comment">#defined period of epidemia</span>
+
+plot(time, S, <span class="hljs-attr">label</span> = <span class="hljs-string">"Восприимчивые к болезни"</span>, <span class="hljs-attr">color</span> = :blue, <span class="hljs-attr">legend</span> = :top, <span class="hljs-attr">title</span> = <span class="hljs-string">"Протекание эпидемии\n(1-й сценарий)"</span>)
+plot!(time, I, <span class="hljs-attr">label</span> = <span class="hljs-string">"Инфицированные"</span>, <span class="hljs-attr">color</span> = :green)
+plot!(time, R, <span class="hljs-attr">label</span> = <span class="hljs-string">"Носители иммунитета"</span>, <span class="hljs-attr">color</span> = :red)
+savefig(<span class="hljs-string">"julia_1.png"</span>)
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab6/Screenshots/julia_1.png" alt="pic"></p>
+<hr>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+const <span class="hljs-attr">N</span> = <span class="hljs-number">13013</span> <span class="hljs-comment">#number of all citizens living on the island</span>
+const <span class="hljs-attr">I0</span> = <span class="hljs-number">113</span> <span class="hljs-comment">#number of infected people at t=0</span>
+const <span class="hljs-attr">R0</span> = <span class="hljs-number">31</span> <span class="hljs-comment">#number of immune people at t=0</span>
+const <span class="hljs-attr">S0</span> = N - I0 - R0 <span class="hljs-comment">#number of healthy people at t=0</span>
+const <span class="hljs-attr">alpha</span> = <span class="hljs-number">0.23</span> <span class="hljs-comment">#coefficient of disease</span>
+const <span class="hljs-attr">beta</span> = <span class="hljs-number">0.085</span>  <span class="hljs-comment">#coefficient of recure</span>
+
+function equations_system(du, u, p, t)
+    S, I, <span class="hljs-attr">R</span> = u
+    du[<span class="hljs-number">1</span>] = -alpha * u[<span class="hljs-number">1</span>]
+    du[<span class="hljs-number">2</span>] = alpha * u[<span class="hljs-number">1</span>] - beta * u[<span class="hljs-number">2</span>]
+    du[<span class="hljs-number">3</span>] = beta * I
+end
+
+<span class="hljs-attr">u0</span> = [S0, I0, R0]
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">80.0</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(equations_system, u0, timeSpan)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.01</span>)
+
+<span class="hljs-attr">S</span> = [u[<span class="hljs-number">1</span>] for u <span class="hljs-keyword">in</span> solution.u] <span class="hljs-comment">#number of healthy people during 'time'</span>
+<span class="hljs-attr">I</span> = [u[<span class="hljs-number">2</span>] for u <span class="hljs-keyword">in</span> solution.u] <span class="hljs-comment">#number of infected people during 'time'</span>
+<span class="hljs-attr">R</span> = [u[<span class="hljs-number">3</span>] for u <span class="hljs-keyword">in</span> solution.u] <span class="hljs-comment">#number of immune people during 'time'</span>
+<span class="hljs-attr">time</span> = [t for t <span class="hljs-keyword">in</span> solution.t] <span class="hljs-comment">#defined period of epidemia</span>
+
+plot(time, S, <span class="hljs-attr">label</span> = <span class="hljs-string">"Восприимчивые к болезни"</span>, <span class="hljs-attr">color</span> = :blue, <span class="hljs-attr">legend</span> = :top, <span class="hljs-attr">title</span> = <span class="hljs-string">"Протекание эпидемии\n(2-й сценарий)"</span>)
+plot!(time, I, <span class="hljs-attr">label</span> = <span class="hljs-string">"Инфицированные"</span>, <span class="hljs-attr">color</span> = :green)
+plot!(time, R, <span class="hljs-attr">label</span> = <span class="hljs-string">"Носители иммунитета"</span>, <span class="hljs-attr">color</span> = :red)
+savefig(<span class="hljs-string">"julia_2.png"</span>)
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab6/Screenshots/julia_2.png" alt="pic"></p>
+<hr>
+<h2 id="2-">2 задание</h2>
+<pre><code><span class="hljs-keyword">model</span> model_1
+  constant Real N = <span class="hljs-number">13013</span>; <span class="hljs-comment">//number of all citizens living on the island</span>
+  Real I; <span class="hljs-comment">//number of infected people at t=0</span>
+  Real R; <span class="hljs-comment">//number of immune people at t=0</span>
+  Real S; <span class="hljs-comment">//number of healthy people at t=0</span>
+  constant Real alpha = <span class="hljs-number">0.23</span>; <span class="hljs-comment">//coefficient of disease</span>
+  constant Real <span class="hljs-built-in">beta</span> = <span class="hljs-number">0.085</span>;  <span class="hljs-comment">//coefficient of recure</span>
+
+initial <span class="hljs-keyword">equation</span>
+  I <span class="hljs-comment">= 113</span>;
+  R = <span class="hljs-number">31</span>;
+  S = N - I - R;
+
+<span class="hljs-keyword">equation</span>
+  der(S) <span class="hljs-comment">= 0</span>;
+  der(I) = -<span class="hljs-built-in">beta</span> * I;
+  der(R) = <span class="hljs-built-in">beta</span> * I;
+
+end model_1;
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab6/Screenshots/om_1.png" alt="pic"></p>
+<hr>
+<pre><code><span class="hljs-keyword">model</span> model_2
+  constant Real N = <span class="hljs-number">13013</span>; <span class="hljs-comment">//number of all citizens living on the island</span>
+  Real I; <span class="hljs-comment">//number of infected people at t=0</span>
+  Real R; <span class="hljs-comment">//number of immune people at t=0</span>
+  Real S; <span class="hljs-comment">//number of healthy people at t=0</span>
+  constant Real alpha = <span class="hljs-number">0.23</span>; <span class="hljs-comment">//coefficient of disease</span>
+  constant Real <span class="hljs-built-in">beta</span> = <span class="hljs-number">0.085</span>;  <span class="hljs-comment">//coefficient of recure</span>
+
+initial <span class="hljs-keyword">equation</span>
+  I <span class="hljs-comment">= 113</span>;
+  R = <span class="hljs-number">31</span>;
+  S = N - I - R;
+
+<span class="hljs-keyword">equation</span>
+  der(S) <span class="hljs-comment">= -alpha * S</span>;
+  der(I) = alpha * S - <span class="hljs-built-in">beta</span> * I;
+  der(R) = <span class="hljs-built-in">beta</span> * I;
+
+end model_2;
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab6/Screenshots/om_2.png" alt="pic"></p>
+<hr>
+<p>##</p>
+<h2 id="-">Спасибо за внимание!</h2>
+</body></html>
