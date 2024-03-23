@@ -1,0 +1,152 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><hr>
+<p>marp: true
+title: Marp
+paginate: true</p>
+<h2 id="backgroundcolor-grey">backgroundColor: grey</h2>
+<h2 id="-7">Лабораторная работа №7</h2>
+<h3 id="-">Модель &quot;эффективность рекламы&quot;</h3>
+<p><br/>
+дисциплина:  Математическое моделирование</p>
+<p>Студент: Койфман Кирилл Дмитриевич
+Группа: НПИбд-01-21</p>
+<hr>
+<h2 id="-">Введение.</h2>
+<h3 id="-">Цель работы.</h3>
+<p>Разработать решение для модели &quot;эффективность рекламы&quot; с помощью математического моделирования на языках Julia и OpenModelica.</p>
+<h3 id="-">Описание задания</h3>
+<p>Постройте график распространения рекламы, математическая модель которой описывается 
+следующим уравнением:</p>
+<ol>
+<li>$\frac{dn}{dt}=(0.88+0.000066n(t))(N-n(t))$</li>
+<li>$\frac{dn}{dt}=(0.000055+0.44n(t))(N-n(t))$</li>
+<li>$\frac{dn}{dt}=(0.52cos(t)+0.37sin(t)n(t))(N-n(t))$</li>
+</ol>
+<p>При этом объем аудитории $N=1656$, в начальный момент о товаре знает 17 человек.</p>
+<h3 id="-">Задачи.</h3>
+<ol>
+<li>Реализовать модель &quot;эффективность рекламы&quot; и построить графики распространения рекламы для всех 3-х случаев на языке Julia. </li>
+<li>Реализовать модель &quot;эффективность рекламы&quot; и построить графики распространения рекламы для всех 3-х случаев на языке OpenModelica. </li>
+</ol>
+<hr>
+<h2 id="1-">1 задание</h2>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+const <span class="hljs-attr">N</span> = <span class="hljs-number">1656</span> <span class="hljs-comment">#number of all people (audicity)</span>
+const <span class="hljs-attr">n0</span> = <span class="hljs-number">17</span> <span class="hljs-comment">#people knowing about product at t=0</span>
+<span class="hljs-comment">#[first member of eq.]advertising campaign intensity</span>
+<span class="hljs-comment">#[second  member of eq.]effectiveness of word of mouth marketing</span>
+
+function equation_function(du, u, p, t)
+    (n) = u
+    du[<span class="hljs-number">1</span>] = (<span class="hljs-number">0.88</span> + <span class="hljs-number">0.000066</span> * u[<span class="hljs-number">1</span>]) * (N - u[<span class="hljs-number">1</span>])
+end
+
+<span class="hljs-attr">u0</span> = [n0]
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">8.0</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(equation_function, u0, timeSpan)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.01</span>)
+
+<span class="hljs-attr">n</span> = [u[<span class="hljs-number">1</span>] for u <span class="hljs-keyword">in</span> solution.u]
+<span class="hljs-attr">time</span> = [t for t <span class="hljs-keyword">in</span> solution.t]
+
+plot(time, n, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Распространение рекламы\n(1-й сценарий)"</span>)
+savefig(<span class="hljs-string">"julia_1.png"</span>)
+</code></pre><hr>
+<h2 id="-pic-https-raw-githubusercontent-com-kirillkoifman-study_2023-2024_mathmod-master-labs-lab7-screenshots-julia_1-png-"><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab7/Screenshots/julia_1.png" alt="pic"></h2>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+const <span class="hljs-attr">N</span> = <span class="hljs-number">1656</span> <span class="hljs-comment">#number of all people (audicity)</span>
+const <span class="hljs-attr">n0</span> = <span class="hljs-number">17</span> <span class="hljs-comment">#people knowing about product at t=0</span>
+<span class="hljs-comment">#[first member of eq.]advertising campaign intensity</span>
+<span class="hljs-comment">#[second  member of eq.]effectiveness of word of mouth marketing</span>
+
+function equation_function(du, u, p, t)
+    (n) = u
+    du[<span class="hljs-number">1</span>] = (<span class="hljs-number">0.000055</span> + <span class="hljs-number">0.44</span> * u[<span class="hljs-number">1</span>]) * (N - u[<span class="hljs-number">1</span>])
+end
+
+<span class="hljs-attr">u0</span> = [n0]
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">0.02</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(equation_function, u0, timeSpan)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.0005</span>)
+
+<span class="hljs-attr">n</span> = [u[<span class="hljs-number">1</span>] for u <span class="hljs-keyword">in</span> solution.u]
+<span class="hljs-attr">time</span> = [t for t <span class="hljs-keyword">in</span> solution.t]
+
+plot(time, n, <span class="hljs-attr">legend</span> = <span class="hljs-literal">false</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Распространение рекламы\n(2-й сценарий)"</span>)
+savefig(<span class="hljs-string">"julia_2.png"</span>)
+</code></pre><hr>
+<h2 id="-pic-https-raw-githubusercontent-com-kirillkoifman-study_2023-2024_mathmod-master-labs-lab7-screenshots-julia_2-png-"><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab7/Screenshots/julia_2.png" alt="pic"></h2>
+<pre><code><span class="hljs-keyword">using</span> Plots;
+<span class="hljs-keyword">using</span> DifferentialEquations;
+
+<span class="hljs-keyword">const</span> N = <span class="hljs-number">1656</span> #number <span class="hljs-keyword">of</span> all people (audicity)
+<span class="hljs-keyword">const</span> n0 = <span class="hljs-number">17</span> #people knowing about product at t=<span class="hljs-number">0</span>
+#[first member <span class="hljs-keyword">of</span> eq.]advertising campaign intensity
+#[second  member <span class="hljs-keyword">of</span> eq.]effectiveness <span class="hljs-keyword">of</span> word <span class="hljs-keyword">of</span> mouth marketing
+
+<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">equation_function</span><span class="hljs-params">(du, u, p, t)</span>
+    <span class="hljs-params">(n)</span> = <span class="hljs-title">u</span>
+    <span class="hljs-title">du</span>[1] = <span class="hljs-params">(0.52 * cos(t)</span> + 0.37 * <span class="hljs-title">sin</span><span class="hljs-params">(t)</span> * <span class="hljs-title">u</span>[1]) * <span class="hljs-params">(N - u[1])</span>
+<span class="hljs-title">end</span>
+
+<span class="hljs-title">u0</span> = [<span class="hljs-title">n0</span>]
+<span class="hljs-title">timeSpan</span> = <span class="hljs-params">(0.0, 0.3)</span>
+
+<span class="hljs-title">problem</span> = <span class="hljs-title">ODEProblem</span><span class="hljs-params">(equation_function, u0, timeSpan)</span>
+<span class="hljs-title">solution</span> = <span class="hljs-title">solve</span><span class="hljs-params">(problem, dtmax = 0.0005)</span>
+
+<span class="hljs-title">n</span> = [<span class="hljs-title">u</span>[1] <span class="hljs-title">for</span> <span class="hljs-title">u</span> <span class="hljs-title">in</span> <span class="hljs-title">solution</span>.<span class="hljs-title">u</span>]
+<span class="hljs-title">time</span> = [<span class="hljs-title">t</span> <span class="hljs-title">for</span> <span class="hljs-title">t</span> <span class="hljs-title">in</span> <span class="hljs-title">solution</span>.<span class="hljs-title">t</span>]
+
+<span class="hljs-title">plot</span><span class="hljs-params">(time, n, legend = <span class="hljs-keyword">false</span>, title = "Распространение рекламы\n(3-й сценарий)</span>")
+<span class="hljs-title">savefig</span><span class="hljs-params">("julia_3.png")</span></span>
+</code></pre><hr>
+<h2 id="-pic-https-raw-githubusercontent-com-kirillkoifman-study_2023-2024_mathmod-master-labs-lab7-screenshots-julia_3-png-"><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab7/Screenshots/julia_3.png" alt="pic"></h2>
+<h2 id="2-">2 задание</h2>
+<pre><code>model model_1
+constant Real <span class="hljs-built_in">N</span> = <span class="hljs-number">1656</span>;
+Real <span class="hljs-built_in">n</span>;
+
+initial equation
+<span class="hljs-built_in">n</span> = <span class="hljs-number">17</span>;
+
+equation
+der(<span class="hljs-built_in">n</span>) = (<span class="hljs-number">0.88</span> + <span class="hljs-number">0.000066</span> * <span class="hljs-built_in">n</span>) * (<span class="hljs-built_in">N</span> - <span class="hljs-built_in">n</span>);
+
+end model_1;
+</code></pre><h2 id="-pic-https-raw-githubusercontent-com-kirillkoifman-study_2023-2024_mathmod-master-labs-lab7-screenshots-om_1-png-"><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab7/Screenshots/om_1.png" alt="pic"></h2>
+<pre><code>model model_2
+constant Real <span class="hljs-built_in">N</span> = <span class="hljs-number">1656</span>;
+Real <span class="hljs-built_in">n</span>;
+
+initial equation
+<span class="hljs-built_in">n</span> = <span class="hljs-number">17</span>;
+
+equation
+der(<span class="hljs-built_in">n</span>) = (<span class="hljs-number">0.000055</span> + <span class="hljs-number">0.44</span> * <span class="hljs-built_in">n</span>) * (<span class="hljs-built_in">N</span> - <span class="hljs-built_in">n</span>);
+
+end model_2;
+</code></pre><h2 id="-pic-https-raw-githubusercontent-com-kirillkoifman-study_2023-2024_mathmod-master-labs-lab7-screenshots-om_2-png-"><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab7/Screenshots/om_2.png" alt="pic"></h2>
+<pre><code>model model_3
+constant Real <span class="hljs-built_in">N</span> = <span class="hljs-number">1656</span>;
+Real <span class="hljs-built_in">n</span>;
+
+initial equation
+<span class="hljs-built_in">n</span> = <span class="hljs-number">17</span>;
+
+equation
+der(<span class="hljs-built_in">n</span>) = (<span class="hljs-number">0.52</span> * <span class="hljs-built_in">cos</span>(<span class="hljs-built_in">time</span>) + <span class="hljs-number">0.37</span> * <span class="hljs-built_in">sin</span>(<span class="hljs-built_in">time</span>) * <span class="hljs-built_in">n</span>) * (<span class="hljs-built_in">N</span> - <span class="hljs-built_in">n</span>);
+
+end model_3;
+</code></pre><h2 id="-pic-https-raw-githubusercontent-com-kirillkoifman-study_2023-2024_mathmod-master-labs-lab7-screenshots-om_3-png-"><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab7/Screenshots/om_3.png" alt="pic"></h2>
+<p>##</p>
+<h2 id="-">Спасибо за внимание!</h2>
+</body></html>
