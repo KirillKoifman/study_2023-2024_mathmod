@@ -1,0 +1,208 @@
+<html><head><style>body {
+   color: black;
+}
+</style></head><body><hr>
+<p>marp: true
+title: Marp
+paginate: true</p>
+<h2 id="backgroundcolor-grey">backgroundColor: grey</h2>
+<h2 id="-8">Лабораторная работа №8</h2>
+<h3 id="-">Модель &quot;конкуренция двух фирм&quot;</h3>
+<p><br/>
+дисциплина:  Математическое моделирование</p>
+<p>Студент: Койфман Кирилл Дмитриевич
+Группа: НПИбд-01-21</p>
+<hr>
+<h2 id="-">Введение.</h2>
+<h3 id="-">Цель работы.</h3>
+<p>Разработать решение для модели &quot;конкуренция двух фирм&quot; с помощью математического моделирования на языках Julia и OpenModelica.</p>
+<h3 id="-">Описание задания</h3>
+<p>Случай 1. Рассмотрим две фирмы, производящие взаимозаменяемые товары 
+одинакового качества и находящиеся в одной рыночной нише. Считаем, что в рамках 
+нашей модели конкурентная борьба ведётся только рыночными методами. То есть, 
+конкуренты могут влиять на противника путем изменения параметров своего 
+производства: себестоимость, время цикла, но не могут прямо вмешиваться в 
+ситуацию на рынке («назначать» цену или влиять на потребителей каким-либо иным 
+способом.) Будем считать, что постоянные издержки пренебрежимо малы, и в 
+модели учитывать не будем. В этом случае динамика изменения объемов продаж 
+фирмы 1 и фирмы 2 описывается следующей системой уравнений:</p>
+<p>$\frac{dM_1}{d\Theta}=M_1-\frac{b}{c_1}M_1M_2-\frac{a_1}{c_1}M_1^2$</p>
+<p>$\frac{dM_2}{d\Theta}=\frac{c_2}{c_1}M_2-\frac{b}{c_1}M_1M_2-\frac{a_2}{c_1}M_2^2$</p>
+<p>где $a<em>1=\frac{p</em>{cr}}{\tau_1^2\widetilde{p_1}^2Nq}$,
+$a<em>2=\frac{p</em>{cr}}{\tau_2^2\widetilde{p<em>2}^2Nq}$,
+$b=\frac{p</em>{cr}}{\tau_1^2\widetilde{p_1}^2\tau_2^2\widetilde{p_2}^2Nq}$,
+$c<em>1=\frac{p</em>{cr}-\widetilde{p_1}}{\tau_1\widetilde{p_1}}$,
+$c<em>2=\frac{p</em>{cr}-\widetilde{p_2}}{\tau_2\widetilde{p_2}}$.</p>
+<p>Также введена нормировка $t=c_1\Theta$.</p>
+<p>Случай 2. Рассмотрим модель, когда, помимо экономического фактора
+влияния (изменение себестоимости, производственного цикла, использование 
+кредита и т.п.), используются еще и социально-психологические факторы –
+формирование общественного предпочтения одного товара другому, не зависимо от 
+их качества и цены. В этом случае взаимодействие двух фирм будет зависеть друг 
+от друга, соответственно коэффициент перед 
+$M_1M_2$ будет отличаться. Пусть в рамках рассматриваемой модели динамика изменения объемов продаж фирмы 1 и фирмы 2 описывается следующей системой уравнений:</p>
+<p>$\frac{dM_1}{d\Theta}=M_1-(\frac{b}{c_1}+0.00069)M_1M_2-\frac{a_1}{c_1}M_1^2$</p>
+<h2 id="-frac-dm_2-d-theta-frac-c_2-c_1-m_2-frac-b-c_1-m_1m_2-frac-a_2-c_1-m_2-2-">$\frac{dM_2}{d\Theta}=\frac{c_2}{c_1}M_2-\frac{b}{c_1}M_1M_2-\frac{a_2}{c_1}M_2^2$</h2>
+<p>Для обоих случаев рассмотрим задачу со следующими начальными условиями и параметрами:</p>
+<p>$M_0^1=7.5, M_0^2=6.5$,</p>
+<p>$p_{cr}=40,N=45,q=1,$</p>
+<p>$\tau_1=20,\tau_2=25,$</p>
+<p>$\widetilde{p_1}=15.5,\widetilde{p_2}=9$</p>
+<ol>
+<li>Постройте графики изменения оборотных средств фирмы 1 и фирмы 2 без 
+учета постоянных издержек и с веденной нормировкой для случая 1.</li>
+<li>Постройте графики изменения оборотных средств фирмы 1 и фирмы 2 без 
+учета постоянных издержек и с веденной нормировкой для случая 2.</li>
+</ol>
+<hr>
+<h3 id="-">Задачи.</h3>
+<ol>
+<li>Реализовать модель &quot;конкуренция двух фирм&quot; и построить графики изменения оборотных средств фирмы 1 и фирмы 2 без учета постоянных издержек и с веденной нормировкой для случаев 1 и 2 на языке Julia. </li>
+<li>Реализовать модель &quot;конкуренция двух фирм&quot; и построить графики изменения оборотных средств фирмы 1 и фирмы 2 без учета постоянных издержек и с веденной нормировкой для случаев 1 и 2 на языке OpenModelica. </li>
+</ol>
+<h2 id="1-">1 задание</h2>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+const <span class="hljs-attr">M1_0</span> = <span class="hljs-number">7.5</span> <span class="hljs-comment">#working capital of the 1st firm</span>
+const <span class="hljs-attr">M2_0</span> = <span class="hljs-number">6.5</span> <span class="hljs-comment">#working capital of the 2nd firm</span>
+const <span class="hljs-attr">p_cr</span> = <span class="hljs-number">40</span> <span class="hljs-comment">#critical cost of the product</span>
+const <span class="hljs-attr">N</span> = <span class="hljs-number">45</span> <span class="hljs-comment">#number of consumers of the produced product</span>
+const <span class="hljs-attr">q</span> = <span class="hljs-number">1</span> <span class="hljs-comment">#maximum need of one person for a product per unit of time</span>
+const <span class="hljs-attr">t1</span> = <span class="hljs-number">20</span> <span class="hljs-comment">#production cycle duration for 1st firm</span>
+const <span class="hljs-attr">p1</span> = <span class="hljs-number">15.5</span> <span class="hljs-comment">#market price of the product for 1st firm</span>
+const <span class="hljs-attr">t2</span> = <span class="hljs-number">25</span> <span class="hljs-comment">#production cycle duration for 2nd firm</span>
+const <span class="hljs-attr">p2</span> = <span class="hljs-number">9</span> <span class="hljs-comment">#market price of the product for 2nd firm</span>
+
+const <span class="hljs-attr">a1</span> = p_cr / (t1 * t1 * p1 * p1 * N * q)
+const <span class="hljs-attr">a2</span> = p_cr / (t2 * t2 * p2 * p2 * N * q)
+const <span class="hljs-attr">b</span> = p_cr / (t1 * t1 * p1 * p1 * t2 * t2 * p2 * p2 * N * q)
+const <span class="hljs-attr">c1</span> = (p_cr - p1) / (t1 * p1)
+const <span class="hljs-attr">c2</span> = (p_cr - p2) / (t2 * p2)
+
+function equations_system(du, u, p, t)
+    M1, <span class="hljs-attr">M2</span> = u
+    du[<span class="hljs-number">1</span>] = M1 - (b / c1) * M1 * M2 - (a1 / c1) * M1 * M1
+    du[<span class="hljs-number">2</span>] = (c2 / c1) * M2 - (b / c1) * M1 * M2 - (a2 / c1) * M2 * M2
+end
+
+<span class="hljs-attr">u0</span> = [M1_0, M2_0]
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">20.0</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(equations_system, u0, timeSpan)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.01</span>)
+
+<span class="hljs-attr">M1</span> = [u[<span class="hljs-number">1</span>] for u <span class="hljs-keyword">in</span> solution.u]
+<span class="hljs-attr">M2</span> = [u[<span class="hljs-number">2</span>] for u <span class="hljs-keyword">in</span> solution.u]
+<span class="hljs-attr">time</span> = [t for t <span class="hljs-keyword">in</span> solution.t]
+
+plot(time, M1, <span class="hljs-attr">label</span> = <span class="hljs-string">"оборотные средства фирмы №1"</span>,<span class="hljs-attr">legend</span> = <span class="hljs-literal">true</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Изменение оборотных средств\n(1-й сценарий)"</span>)
+plot!(time, M2, <span class="hljs-attr">label</span> = <span class="hljs-string">"оборотные средства фирмы №2"</span>)
+savefig(<span class="hljs-string">"julia_1.png"</span>)
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab8/Screenshots/julia_1.png" alt="pic"></p>
+<hr>
+<pre><code>using Plots;
+using DifferentialEquations;
+
+const <span class="hljs-attr">M1_0</span> = <span class="hljs-number">7.5</span> <span class="hljs-comment">#working capital of the 1st firm</span>
+const <span class="hljs-attr">M2_0</span> = <span class="hljs-number">6.5</span> <span class="hljs-comment">#working capital of the 2nd firm</span>
+const <span class="hljs-attr">p_cr</span> = <span class="hljs-number">40</span> <span class="hljs-comment">#critical cost of the product</span>
+const <span class="hljs-attr">N</span> = <span class="hljs-number">45</span> <span class="hljs-comment">#number of consumers of the produced product</span>
+const <span class="hljs-attr">q</span> = <span class="hljs-number">1</span> <span class="hljs-comment">#maximum need of one person for a product per unit of time</span>
+const <span class="hljs-attr">t1</span> = <span class="hljs-number">20</span> <span class="hljs-comment">#production cycle duration for 1st firm</span>
+const <span class="hljs-attr">p1</span> = <span class="hljs-number">15.5</span> <span class="hljs-comment">#market price of the product for 1st firm</span>
+const <span class="hljs-attr">t2</span> = <span class="hljs-number">25</span> <span class="hljs-comment">#production cycle duration for 2nd firm</span>
+const <span class="hljs-attr">p2</span> = <span class="hljs-number">9</span> <span class="hljs-comment">#market price of the product for 2nd firm</span>
+
+const <span class="hljs-attr">a1</span> = p_cr / (t1 * t1 * p1 * p1 * N * q)
+const <span class="hljs-attr">a2</span> = p_cr / (t2 * t2 * p2 * p2 * N * q)
+const <span class="hljs-attr">b</span> = p_cr / (t1 * t1 * p1 * p1 * t2 * t2 * p2 * p2 * N * q)
+const <span class="hljs-attr">c1</span> = (p_cr - p1) / (t1 * p1)
+const <span class="hljs-attr">c2</span> = (p_cr - p2) / (t2 * p2)
+
+function equations_system(du, u, p, t)
+    M1, <span class="hljs-attr">M2</span> = u
+    du[<span class="hljs-number">1</span>] = M1 - (b / c1 + <span class="hljs-number">0.00069</span>) * M1 * M2 - (a1 / c1) * M1 * M1
+    du[<span class="hljs-number">2</span>] = (c2 / c1) * M2 - (b / c1) * M1 * M2 - (a2 / c1) * M2 * M2
+end
+
+<span class="hljs-attr">u0</span> = [M1_0, M2_0]
+<span class="hljs-attr">timeSpan</span> = (<span class="hljs-number">0.0</span>, <span class="hljs-number">20.0</span>)
+
+<span class="hljs-attr">problem</span> = ODEProblem(equations_system, u0, timeSpan)
+<span class="hljs-attr">solution</span> = solve(problem, <span class="hljs-attr">dtmax</span> = <span class="hljs-number">0.01</span>)
+
+<span class="hljs-attr">M1</span> = [u[<span class="hljs-number">1</span>] for u <span class="hljs-keyword">in</span> solution.u]
+<span class="hljs-attr">M2</span> = [u[<span class="hljs-number">2</span>] for u <span class="hljs-keyword">in</span> solution.u]
+<span class="hljs-attr">time</span> = [t for t <span class="hljs-keyword">in</span> solution.t]
+
+plot(time, M1, <span class="hljs-attr">label</span> = <span class="hljs-string">"оборотные средства фирмы №1"</span>,<span class="hljs-attr">legend</span> = <span class="hljs-literal">true</span>, <span class="hljs-attr">title</span> = <span class="hljs-string">"Изменение оборотных средств\n(2-й сценарий)"</span>)
+plot!(time, M2, <span class="hljs-attr">label</span> = <span class="hljs-string">"оборотные средства фирмы №2"</span>)
+savefig(<span class="hljs-string">"julia_2.png"</span>)
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab8/Screenshots/julia_2.png" alt="pic"></p>
+<hr>
+<h2 id="2-">2 задание</h2>
+<pre><code><span class="hljs-symbol">model</span> model_1
+<span class="hljs-symbol">constant</span> Real p_cr = <span class="hljs-number">40</span><span class="hljs-comment">; //critical cost of the product</span>
+<span class="hljs-symbol">constant</span> Real N = <span class="hljs-number">45</span><span class="hljs-comment">; //number of consumers of the produced product</span>
+<span class="hljs-symbol">constant</span> Real q = <span class="hljs-number">1</span><span class="hljs-comment">; //maximum need of one person for a product per unit of time</span>
+<span class="hljs-symbol">constant</span> Real t1 = <span class="hljs-number">20</span><span class="hljs-comment">; //production cycle duration for 1st firm</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">p1</span> = <span class="hljs-number">15</span>.<span class="hljs-number">5</span><span class="hljs-comment">; //market price of the product for 1st firm</span>
+<span class="hljs-symbol">constant</span> Real t2 = <span class="hljs-number">25</span><span class="hljs-comment">; //production cycle duration for 2nd firm</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">p2</span> = <span class="hljs-number">9</span><span class="hljs-comment">; //market price of the product for 2nd firm</span>
+
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">a1</span> = p_cr / (t1 * t1 * <span class="hljs-built_in">p1</span> * <span class="hljs-built_in">p1</span> * N * q)<span class="hljs-comment">;</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">a2</span> = p_cr / (t2 * t2 * <span class="hljs-built_in">p2</span> * <span class="hljs-built_in">p2</span> * N * q)<span class="hljs-comment">;</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-keyword">b </span>= p_cr / (t1 * t1 * <span class="hljs-built_in">p1</span> * <span class="hljs-built_in">p1</span> * t2 * t2 * <span class="hljs-built_in">p2</span> * <span class="hljs-built_in">p2</span> * N * q)<span class="hljs-comment">;</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">c1</span> = (p_cr - <span class="hljs-built_in">p1</span>) / (t1 * <span class="hljs-built_in">p1</span>)<span class="hljs-comment">;</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">c2</span> = (p_cr - <span class="hljs-built_in">p2</span>) / (t2 * <span class="hljs-built_in">p2</span>)<span class="hljs-comment">;</span>
+
+<span class="hljs-symbol">Real</span> M1<span class="hljs-comment">; //working capital of the 1st firm</span>
+<span class="hljs-symbol">Real</span> M2<span class="hljs-comment">; //working capital of the 2nd firm</span>
+
+<span class="hljs-symbol">initial</span> equation
+<span class="hljs-symbol">M1</span> = <span class="hljs-number">7</span>.<span class="hljs-number">5</span><span class="hljs-comment">;</span>
+<span class="hljs-symbol">M2</span> = <span class="hljs-number">6</span>.<span class="hljs-number">5</span><span class="hljs-comment">;</span>
+
+<span class="hljs-symbol">equation</span>
+<span class="hljs-symbol">der</span>(M1) = M1 - (<span class="hljs-keyword">b </span>/ <span class="hljs-built_in">c1</span>) * M1 * M2 - (<span class="hljs-built_in">a1</span> / <span class="hljs-built_in">c1</span>) * M1 * M1<span class="hljs-comment">;</span>
+<span class="hljs-symbol">der</span>(M2) = (<span class="hljs-built_in">c2</span> / <span class="hljs-built_in">c1</span>) * M2 - (<span class="hljs-keyword">b </span>/ <span class="hljs-built_in">c1</span>) * M1 * M2 - (<span class="hljs-built_in">a2</span> / <span class="hljs-built_in">c1</span>) * M2 * M2<span class="hljs-comment">;</span>
+
+<span class="hljs-symbol">end</span> model_1<span class="hljs-comment">;</span>
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab8/Screenshots/om_1.png" alt="pic"></p>
+<hr>
+<pre><code><span class="hljs-symbol">model</span> model_2
+<span class="hljs-symbol">constant</span> Real p_cr = <span class="hljs-number">40</span><span class="hljs-comment">; //critical cost of the product</span>
+<span class="hljs-symbol">constant</span> Real N = <span class="hljs-number">45</span><span class="hljs-comment">; //number of consumers of the produced product</span>
+<span class="hljs-symbol">constant</span> Real q = <span class="hljs-number">1</span><span class="hljs-comment">; //maximum need of one person for a product per unit of time</span>
+<span class="hljs-symbol">constant</span> Real t1 = <span class="hljs-number">20</span><span class="hljs-comment">; //production cycle duration for 1st firm</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">p1</span> = <span class="hljs-number">15</span>.<span class="hljs-number">5</span><span class="hljs-comment">; //market price of the product for 1st firm</span>
+<span class="hljs-symbol">constant</span> Real t2 = <span class="hljs-number">25</span><span class="hljs-comment">; //production cycle duration for 2nd firm</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">p2</span> = <span class="hljs-number">9</span><span class="hljs-comment">; //market price of the product for 2nd firm</span>
+
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">a1</span> = p_cr / (t1 * t1 * <span class="hljs-built_in">p1</span> * <span class="hljs-built_in">p1</span> * N * q)<span class="hljs-comment">;</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">a2</span> = p_cr / (t2 * t2 * <span class="hljs-built_in">p2</span> * <span class="hljs-built_in">p2</span> * N * q)<span class="hljs-comment">;</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-keyword">b </span>= p_cr / (t1 * t1 * <span class="hljs-built_in">p1</span> * <span class="hljs-built_in">p1</span> * t2 * t2 * <span class="hljs-built_in">p2</span> * <span class="hljs-built_in">p2</span> * N * q)<span class="hljs-comment">;</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">c1</span> = (p_cr - <span class="hljs-built_in">p1</span>) / (t1 * <span class="hljs-built_in">p1</span>)<span class="hljs-comment">;</span>
+<span class="hljs-symbol">constant</span> Real <span class="hljs-built_in">c2</span> = (p_cr - <span class="hljs-built_in">p2</span>) / (t2 * <span class="hljs-built_in">p2</span>)<span class="hljs-comment">;</span>
+
+<span class="hljs-symbol">Real</span> M1<span class="hljs-comment">; //working capital of the 1st firm</span>
+<span class="hljs-symbol">Real</span> M2<span class="hljs-comment">; //working capital of the 2nd firm</span>
+
+<span class="hljs-symbol">initial</span> equation
+<span class="hljs-symbol">M1</span> = <span class="hljs-number">7</span>.<span class="hljs-number">5</span><span class="hljs-comment">;</span>
+<span class="hljs-symbol">M2</span> = <span class="hljs-number">6</span>.<span class="hljs-number">5</span><span class="hljs-comment">;</span>
+
+<span class="hljs-symbol">equation</span>
+<span class="hljs-symbol">der</span>(M1) = M1 - (<span class="hljs-keyword">b </span>/ <span class="hljs-built_in">c1</span> + <span class="hljs-number">0</span>.<span class="hljs-number">00069</span>) * M1 * M2 - (<span class="hljs-built_in">a1</span> / <span class="hljs-built_in">c1</span>) * M1 * M1<span class="hljs-comment">;</span>
+<span class="hljs-symbol">der</span>(M2) = (<span class="hljs-built_in">c2</span> / <span class="hljs-built_in">c1</span>) * M2 - (<span class="hljs-keyword">b </span>/ <span class="hljs-built_in">c1</span>) * M1 * M2 - (<span class="hljs-built_in">a2</span> / <span class="hljs-built_in">c1</span>) * M2 * M2<span class="hljs-comment">;</span>
+
+<span class="hljs-symbol">end</span> model_2<span class="hljs-comment">;</span>
+</code></pre><hr>
+<p><img src="https://raw.githubusercontent.com/KirillKoifman/study_2023-2024_mathmod/master/labs/lab8/Screenshots/om_2.png" alt="pic"></p>
+<p>##</p>
+<h2 id="-">Спасибо за внимание!</h2>
+</body></html>
